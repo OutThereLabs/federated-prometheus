@@ -1,0 +1,21 @@
+- job_name: 'federate'
+  scrape_interval: 15s
+
+  honor_labels: true
+  metrics_path: '/federate'
+
+  scheme: https
+  tls_config:
+    insecure_skip_verify: true
+  basic_auth:
+    username: federated
+    password: some-randome-password
+
+  params:
+    'match[]':
+      - '{__name__="container_memory_rss"}'
+      - '{__name__="container_cpu_usage_seconds_total"}'
+
+  static_configs:
+    - targets:
+      - 'prometheus-k8s-openshift-monitoring.apps.example.com:443'
